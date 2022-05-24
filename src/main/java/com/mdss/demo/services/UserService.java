@@ -33,7 +33,7 @@ public class UserService {
 	}
 	
 	public User update(Long id, User obj) {
-		User entity = repository.getOne(id);
+		User entity = repository.getById(id);
 		updateData(entity, obj);
 		return repository.save(entity);
 	}
