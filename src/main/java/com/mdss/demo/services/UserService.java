@@ -5,21 +5,28 @@ import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.mdss.demo.dto.CreateUserDTO;
+import com.mdss.demo.dto.UserDTO;
 import com.mdss.demo.entities.User;
 import com.mdss.demo.repositories.UserRepository;
 import com.mdss.demo.services.exceptions.DatabaseException;
 import com.mdss.demo.services.exceptions.ResourceNotFoundException;
+
 
 @Service
 public class UserService {
 
 	@Autowired
 	private UserRepository repository;
+	
+	@Autowired
+	ModelMapper mapper;
 
 	public List<User> findAll() {
 		return repository.findAll();
@@ -29,6 +36,19 @@ public class UserService {
 		Optional<User> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
+	
+	public UserDTO findByEmail(String email) {
+		User user = repository.findByEmail(email);
+		UserDTO dto = mapper.map(user, UserDTO.class);
+		return dto;
+	}
+	
+	public CreateUserDTO findUserByEmail(String email) {
+		User user = repository.findByEmail(email);
+		CreateUserDTO dto = mapper.map(user, CreateUserDTO.class);
+		return dto;
+	}
+		
 
 	public User insert(User obj) {
 		return repository.save(obj);
