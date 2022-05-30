@@ -37,11 +37,13 @@ public class UserService {
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
+	
 	public UserDTO findByEmail(String email) {
 		User user = repository.findByEmail(email);
 		UserDTO dto = mapper.map(user, UserDTO.class);
 		return dto;
 	}
+	
 	
 	public CreateUserDTO findUserByEmail(String email) {
 		User user = repository.findByEmail(email);

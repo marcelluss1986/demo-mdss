@@ -24,7 +24,7 @@ public class AuthenticationServices {
 				.setExpiration(new Date(System.currentTimeMillis() + TIME_DURATION))
 				.signWith(SignatureAlgorithm.HS512, SIGNINGKEY)
 				.compact();
-		res.addHeader("Authorization",  PREFIX + jwtToken);
+		res.addHeader("Authorization",  PREFIX + " " + jwtToken);
 		res.addHeader("Access-Control-Expose-Headers", "Authoriation");
 	}
 	
