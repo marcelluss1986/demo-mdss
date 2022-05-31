@@ -65,6 +65,17 @@ public class UserService {
 			throw new DatabaseException(e.getMessage());
 		}
 	}
+	
+	public void delete(String email) {
+		try {
+			repository.deleteByEmail(email);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(email);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+	}
+
 
 	public User update(Long id, User obj) {
 		try {

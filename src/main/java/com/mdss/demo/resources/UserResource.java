@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.mdss.demo.dto.UserDTO;
 import com.mdss.demo.entities.User;
 import com.mdss.demo.services.UserService;
 
@@ -23,7 +26,13 @@ import com.mdss.demo.services.UserService;
 public class UserResource {
 	
 	@Autowired
-	private UserService service;
+	private UserService service;	
+	
+	
+	@GetMapping("/search/byEmail")
+	public UserDTO getByEmail(@Param("email") String email) {
+		return service.findByEmail(email);
+	}
 	
 	@GetMapping
 	public ResponseEntity<List<User>> findAll(){
@@ -49,6 +58,19 @@ public class UserResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@DeleteMapping(value="/{email}")
+	public ResponseEntity<String> delete (@PathVariable String email){
+		UserDTO dto = new UserDTO();
+		dto.setEmail(email);
+		try {
+			service.delete(email);
+			return new ResponseEntity<>(email,HttpStatus.OK);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<>("",HttpStatus.NOT_FOUND);}
+		}
+	
 	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj){

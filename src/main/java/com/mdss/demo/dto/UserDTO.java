@@ -9,6 +9,10 @@ public class UserDTO {
 	private String email;
 	private UUID uuid;
 	
+	public UserDTO() {
+		
+	}
+	
 	public UserDTO(User obj) {
 		this.id = obj.getId();
 		this.email = obj.getEmail();
